@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS article_keyword;
+DROP TABLE IF EXISTS keyword;
+DROP TABLE IF EXISTS author;
+DROP TABLE IF EXISTS article;
