@@ -27,7 +27,7 @@
 
 <div class="container">
     <h2>Résultat de la recherche</h2>
-    <p><?php echo $search ?></p>
+    <p><?php echo $search; ?></p>
 </div>
 
 </body>
