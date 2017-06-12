@@ -86,9 +86,12 @@ class Article
     }
 
     public function getKeyWords(){
+        if(strlen($this->getContent()) < 1)
+            return [];
+
         $tabWeight = [];
-        $tabKeys = explode(' ', preg_replace('/[^a-z0-9]+/i', ' ', strtolower($this->getContent())));
-        $tabTitle = explode(' ', preg_replace('/[^a-z0-9]+/i', ' ', strtolower($this->getTitle())));
+        $tabKeys = explode(' ', preg_replace('/[^a-z]+/i', ' ', strtolower($this->getContent())));
+        $tabTitle = explode(' ', preg_replace('/[^a-z]+/i', ' ', strtolower($this->getTitle())));
 
         // Ajout de 1 au poids d'un mot à chaque fois qu'il est trouvé dans l'article
         foreach($tabKeys as $key){
@@ -129,19 +132,22 @@ class Article
 
         // Tri par nombre d'apparitions
         arsort($tabWeight);
+        $tabValues = [];
         $tabFinal = [];
 
         foreach($tabWeight as $key => $value){
             if(!in_array($key, $transitionWords) && $value > 1){
-                $tabFinal[$key] = $value;
+                $tabValues[$key] = $value;
             }
         }
 
 
         // Harmonisation des poids : poids du mot dans le texte selon la longueur du texte
-        $totalWords = strlen(preg_replace('/[^a-z0-9]+/i', ' ', strtolower($this->getContent())));
-        foreach($tabFinal as $key => $value){
-            $tabFinal[$key] = ($value*1000)/$totalWords;
+        $totalWords = strlen(preg_replace('/[^a-z]+/i', ' ', strtolower($this->getContent())));
+        foreach($tabValues as $key => $value){
+            $calc = ($value*1000)/$totalWords;
+            if($calc > 1)
+                $tabFinal[$key] = $calc;
         }
 
         return $tabFinal;
@@ -178,6 +184,7 @@ class Article
             '',
             'you',
             'your',
+            're',
             'on',
             'll',
             'just',

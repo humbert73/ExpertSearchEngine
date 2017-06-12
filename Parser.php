@@ -57,7 +57,6 @@ class Parser
                     }
                 }
             }
-
             fclose($handle);
         }
 
@@ -84,11 +83,13 @@ class Parser
             } elseif ($this->is('time', $buffer)) {
                 $article->setDate($this->get('time', $buffer));
             } elseif ($this->is('conference', $buffer)) {
-                $article->setConference($this->get('conference', $buffer));
+                $conference = str_replace(array("\n", "\t", "\r"), '', $this->get('conference', $buffer));
+                $article->setConference($conference);
             } elseif ($this->is('index', $buffer)) {
                 $article->setIndex($this->get('index', $buffer));
             } elseif ($this->is('description', $buffer)) {
-                $article->setContent($this->get('description', $buffer));
+                $content = str_replace(array("\n", "\t", "\r"), '', $this->get('description', $buffer));
+                $article->setContent($content);
             } else {
                 return $article;
             }
