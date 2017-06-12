@@ -2,3 +2,22 @@
     width: 75%;
     margin-top: 100px;
 }
+
+.article {
+    margin-top: 15px;
+    padding: 20px;
+    border: 1px solid rgba(57, 57, 57, 0.6);
+    text-align: justify;
+}
+
+.article h3 {
+    margin-top: 0;
+}
+
+.article .conference{
+    font-style: italic;
+}
+
+.article .short-content{
+    margin: 20px;
+}

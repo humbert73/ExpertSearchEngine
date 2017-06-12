@@ -28,8 +28,11 @@
 <div class="container">
     <?php if($search != "") : ?>
     <br />
-    <h2>Résultat de la recherche</h2>
-    <p><?php echo $search; ?></p>
+    <h2>Résultat de recherche pour '<?php echo $search; ?>'</h2>
+        <?php var_dump($article->getKeyWords()); ?>
+        <?php include('_article.php'); ?>
+        <?php include('_article.php'); ?>
+        <?php include('_article.php'); ?>
     <?php endif; ?>
 </div>
 
