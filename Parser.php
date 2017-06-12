@@ -46,12 +46,12 @@ class Parser
                     $article = $this->getArticle($handle, $buffer);
                     $articles[] = $article;
                 }
-                if ($int == 10) {
+                if ($int == 100) {
                     break;
                 }
             }
             echo '<pre>';
-            var_dump($articles);
+//            var_dump($articles);
             echo '</pre>';
             fclose($handle);
         }
@@ -82,11 +82,11 @@ class Parser
             } elseif ($this->is('time', $buffer)) {
                 $date = $this->get('time', $buffer);
             } elseif ($this->is('conference', $buffer)) {
-                $conference = $this->get('conference', $buffer);
+                $conference = str_replace(array("\n", "\t", "\r"), '', $this->get('conference', $buffer));
             } elseif ($this->is('index', $buffer)) {
                 $index = $this->get('index', $buffer);
             } elseif ($this->is('description', $buffer)) {
-                $content = $this->get('description', $buffer);
+                $content = str_replace(array("\n", "\t", "\r"), '', $this->get('description', $buffer));
             } else {
                 return new Article($title, $date, $conference, $author, $index, $content);
             }

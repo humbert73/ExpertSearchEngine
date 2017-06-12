@@ -29,10 +29,10 @@
     <?php if($search != "") : ?>
     <br />
     <h2>Résultat de recherche pour '<?php echo $search; ?>'</h2>
-        <?php var_dump($article->getKeyWords()); ?>
-        <?php include('_article.php'); ?>
-        <?php include('_article.php'); ?>
-        <?php include('_article.php'); ?>
+
+        <?php foreach($articles as $article): ?>
+            <?php include('_article.php'); ?>
+        <?php endforeach; ?>
     <?php endif; ?>
 </div>
 
