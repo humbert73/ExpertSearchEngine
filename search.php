@@ -20,7 +20,7 @@
 
 <form id="search-container" class="container input-group" method="get" action="index.php">
     <input id="search" type="text" class="form-control" name="search" placeholder="Search for...">
-    <span class="input-group-btn">
+    <span class="input-group-btn">  
         <button class="btn btn-default" type="submit">Go!</button>
     </span>
 </form>
