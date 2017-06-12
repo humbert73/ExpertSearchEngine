@@ -14,7 +14,6 @@ use Entity\Article;
 class Parser
 {
     private $file_path;
-    private $articles;
     private $attributes;
 
     public function __construct($file_path)
@@ -34,7 +33,7 @@ class Parser
     public function parse()
     {
         $articles = array();
-        $int = 0;
+        $article_number = 0;
         $handle = fopen($this->file_path, 'r');
 
         if ($handle) {
@@ -42,17 +41,23 @@ class Parser
                 $buffer = fgets($handle);
 
                 if ($this->isNewArticle($buffer)) {
-                    $int++;
+                    $article_number++;
                     $article = $this->getArticle($handle, $buffer);
-                    $articles[] = $article;
-                }
-                if ($int == 10) {
-                    break;
+
+                    if ($article == null) {
+                        fclose($handle);
+
+                        return $articles;
+                    } else {
+                        $articles[] = $article;
+                    }
+
+                    if ($article_number == 3690) {
+                        break;
+                    }
                 }
             }
-            echo '<pre>';
-            var_dump($articles);
-            echo '</pre>';
+
             fclose($handle);
         }
 
@@ -66,33 +71,30 @@ class Parser
 
     private function getArticle($handle, $buffer)
     {
-        $title = $this->get('title', $buffer);
-        $author = null;
-        $date = null;
-        $conference = null;
-        $index = null;
-        $num = null;
-        $content = null;
+        $article = new Article();
+        $article->setTitle($this->get('title', $buffer));
 
         while (!feof($handle)) {
             $buffer = fgets($handle);
 
             if ($this->is('author', $buffer)) {
-                $author = $this->get('author', $buffer);
+                $authors = array();
+                $authors = explode(',', $this->get('author', $buffer));
+                $article->setAuthors($authors);
             } elseif ($this->is('time', $buffer)) {
-                $date = $this->get('time', $buffer);
+                $article->setDate($this->get('time', $buffer));
             } elseif ($this->is('conference', $buffer)) {
-                $conference = $this->get('conference', $buffer);
+                $article->setConference($this->get('conference', $buffer));
             } elseif ($this->is('index', $buffer)) {
-                $index = $this->get('index', $buffer);
+                $article->setIndex($this->get('index', $buffer));
             } elseif ($this->is('description', $buffer)) {
-                $content = $this->get('description', $buffer);
+                $article->setContent($this->get('description', $buffer));
             } else {
-                return new Article($title, $date, $conference, $author, $index, $content);
+                return $article;
             }
         }
 
-        return false;
+        return null;
     }
 
     private function is($attribute_type, $buffer) {

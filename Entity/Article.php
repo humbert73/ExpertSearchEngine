@@ -11,14 +11,14 @@ class Article
     private $index;
     private $content;
 
-    function __construct($title, $date, $conference, $authors, $index, $content)
+    function __construct()
     {
-        $this->title = $title;
-        $this->date = $date;
-        $this->conference = $conference;
-        $this->authors = $authors;
-        $this->index = $index;
-        $this->content = $content;
+        $this->title      = null;
+        $this->date       = null;
+        $this->conference = null;
+        $this->authors    = array();
+        $this->index      = null;
+        $this->content    = null;
     }
 
     public function setTitle($title)

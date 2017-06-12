@@ -19,3 +19,6 @@ include("Parser.php");
 $parser = new Parser('src/outputacm.txt');
 
 $articles = $parser->parse();
+//echo '<pre>';
+//print_r($articles);
+//echo '</pre>';
