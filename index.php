@@ -1,6 +1,7 @@
 <?php
 
 require_once('Entity/Article.php');
+use Entity\Article;
 
 $url = "index.php";
 $search = "";
@@ -15,6 +16,6 @@ $article = new Article('Dude, You Can Do It! How to Build a Sweeet PC', 2007, ''
 include("search.php");
 include("Parser.php");
 
-$parser = new Parser('outputacm.txt');
+$parser = new Parser('src/outputacm.txt');
 
 $articles = $parser->parse();
