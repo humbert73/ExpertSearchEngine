@@ -27,13 +27,13 @@
 
 <div class="container">
     <?php if($search != "") : ?>
-    <br />
-    <h2>Résultat de recherche pour '<?php echo $search; ?>'</h2>
-
-        <?php foreach($articles as $article): ?>
-            <?php include('_article.php'); ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <br />
+        <h2>Résultat de recherche pour '<?= $search ?>'</h2>
+        <?php foreach($articles as $article):
+            $article_link = $url.'?'.http_build_query(array('article_id'=>$article->getIndex()));
+            include('_article.php');
+        endforeach;
+    endif; ?>
 </div>
 
 </body>
