@@ -30,7 +30,7 @@ class Parser
         );
     }
 
-    public function parse()
+    public function parseArticles()
     {
         $articles = array();
         $article_number = 0;
