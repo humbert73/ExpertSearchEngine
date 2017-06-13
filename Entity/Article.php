@@ -10,6 +10,7 @@ class Article
     private $authors;
     private $index;
     private $content;
+    private $weight;
 
     function __construct()
     {
@@ -19,6 +20,7 @@ class Article
         $this->authors    = array();
         $this->index      = null;
         $this->content    = null;
+        $this->weihgt     = 1;
     }
 
     public function setTitle($title)
@@ -49,6 +51,11 @@ class Article
     public function setContent($content)
     {
         $this->content = trim($content);
+    }
+
+    public function setWeight(array $keywords)
+    {
+//        $this->weight =
     }
 
     function getTitle()
@@ -161,7 +168,11 @@ class Article
         return $tabFinal;
     }
 
-    function getTransitionWords()
+    public function getWeight() {
+        return $this->weight;
+    }
+
+    private function getTransitionWords()
     {
         $words = [
             'therefore',

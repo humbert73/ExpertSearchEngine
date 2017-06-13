@@ -30,7 +30,7 @@ class Parser
         );
     }
 
-    public function parseArticles()
+    public function parseArticles(array $keywords)
     {
         $articles = array();
         $article_number = 0;
@@ -42,7 +42,8 @@ class Parser
 
                 if ($this->isNewArticle($buffer)) {
                     $article_number++;
-                    $article = $this->getArticle($handle, $buffer);
+
+                    $article = $this->getArticle($handle, $buffer, $keywords);
 
                     if ($article == null) {
                         fclose($handle);
@@ -68,7 +69,7 @@ class Parser
         return preg_match($this->attributes['title'], $buffer);
     }
 
-    private function getArticle($handle, $buffer)
+    private function getArticle($handle, $buffer, $keywords)
     {
         $article = new Article();
         $article->setTitle($this->get('title', $buffer));
@@ -106,5 +107,8 @@ class Parser
         return ltrim($buffer, $this->attributes[$attribute_type]);
     }
 
-
+    public function getArticlesWithWeight($keywords)
+    {
+        $this->parseArticles($keywords);
+    }
 }

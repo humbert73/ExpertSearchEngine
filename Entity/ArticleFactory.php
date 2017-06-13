@@ -3,6 +3,7 @@
 namespace Entity;
 
 use Parser;
+use Article;
 
 
 class ArticleFactory
@@ -17,11 +18,13 @@ class ArticleFactory
 
     public function getArticles()
     {
-        return $this->parser->parseArticles();
+        return $this->parser->parseArticles(array());
     }
 
     public function findMatchingArticles($search)
     {
-        return $this->getArticles();
+        $keywords = explode(' ', $search);
+
+        return $this->parser->parseArticles($keywords);
     }
 }
