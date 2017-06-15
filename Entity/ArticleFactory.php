@@ -31,7 +31,14 @@ class ArticleFactory
 
     private function getTenFirstArticlesSortByWeight(array $articles)
     {
-        $best_articles_matched = array();
+        $index_tab_indiced_by_weight = $this->getIndexArticlesByWeight($articles);
+        $articles_index_array = $this->getArticlesIndexOrderByDescendentWeight($index_tab_indiced_by_weight);
+
+        return $this->getMatchingArticlesByIndex($articles, $articles_index_array);
+    }
+
+    private function getIndexArticlesByWeight(array $articles)
+    {
         $index_tab_indiced_by_weight = array();
 
         foreach ($articles as $article) {
@@ -46,18 +53,27 @@ class ArticleFactory
         }
 
         krsort($index_tab_indiced_by_weight);
-        $count = 10;
+
+        return $index_tab_indiced_by_weight;
+    }
+
+    private function getArticlesIndexOrderByDescendentWeight(array $index_tab_indiced_by_weight)
+    {
         $articles_index_array = array();
+
         foreach ($index_tab_indiced_by_weight as $weight => $articles_index) {
             $articles_index_array_exloded = explode(' ', $articles_index);
             foreach ($articles_index_array_exloded as $article_index) {
                 $articles_index_array[] = $article_index;
             }
-
-            if ($count <= count($articles_index_array)) {
-                break;
-            }
         }
+
+        return $articles_index_array;
+    }
+
+    private function getMatchingArticlesByIndex(array $articles, array $articles_index_array)
+    {
+        $best_articles_matched = array();
 
         foreach ($articles_index_array as $key => $article_index) {
             $best_articles_matched[] = $articles[$article_index];
