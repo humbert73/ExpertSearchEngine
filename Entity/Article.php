@@ -53,9 +53,18 @@ class Article
         $this->content = trim($content);
     }
 
-    public function setWeight(array $keywords)
+    public function appliedWeight(array $search_keywords)
     {
-//        $this->weight =
+        $this->weight = 1;
+
+        if (! empty($search_keywords)) {
+            $article_keywords = $this->getKeywords();
+            foreach ($article_keywords as $keyword => $keyword_weight) {
+                if (in_array(trim($keyword), $search_keywords)) {
+                    $this->weight += intval($keyword_weight);
+                }
+            }
+        }
     }
 
     function getTitle()
@@ -88,6 +97,11 @@ class Article
         return $this->content;
     }
 
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
     public function getShortContent()
     {
         if (strlen($this->getContent()) > 300) {
@@ -97,7 +111,7 @@ class Article
         }
     }
 
-    public function getKeyWords()
+    public function getKeywords()
     {
         if (strlen($this->getContent()) < 1) {
             return [];
@@ -166,10 +180,6 @@ class Article
         }
 
         return $tabFinal;
-    }
-
-    public function getWeight() {
-        return $this->weight;
     }
 
     private function getTransitionWords()

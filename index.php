@@ -14,7 +14,6 @@ $article_factory = new ArticleFactory($parser);
 
 if (isset($_GET["search"])) {
     $search = $_GET["search"];
-    //TODO: getArticleBySearchRequest()
     $articles = $article_factory->findMatchingArticles($search);
 } else {
     $articles = $article_factory->getArticles();

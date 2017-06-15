@@ -69,16 +69,16 @@ class Parser
         return preg_match($this->attributes['title'], $buffer);
     }
 
-    private function getArticle($handle, $buffer, $keywords)
+    private function getArticle($handle, $buffer, array $keywords)
     {
         $article = new Article();
         $article->setTitle($this->get('title', $buffer));
+        $authors = array();
 
         while (!feof($handle)) {
             $buffer = fgets($handle);
 
             if ($this->is('author', $buffer)) {
-                $authors = array();
                 $authors = explode(',', $this->get('author', $buffer));
                 $article->setAuthors($authors);
             } elseif ($this->is('time', $buffer)) {
@@ -91,7 +91,8 @@ class Parser
             } elseif ($this->is('description', $buffer)) {
                 $content = str_replace(array("\n", "\t", "\r"), '', $this->get('description', $buffer));
                 $article->setContent($content);
-            } else {
+            } else { //We have all article data
+                $article->appliedWeight($keywords);
                 return $article;
             }
         }
