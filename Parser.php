@@ -71,7 +71,7 @@ class Parser
 
     private function getArticle($handle, $buffer, array $keywords)
     {
-        $article = new Article();
+        $article = new Article(new \Entity\ArticleFactory($this));
         $article->setTitle($this->get('title', $buffer));
         $authors = array();
 

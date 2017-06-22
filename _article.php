@@ -19,17 +19,17 @@
         </div>
     <?php endif; ?>
     <div class="keywords">
-        <?php if (sizeof($article->getKeyWords()) > 0) :
+        <?php if (sizeof($article_factory->getKeyWords($article)) > 0) :
             echo 'Keywords: ';
             $i = 1;
-            foreach ($article->getKeyWords() as $kw => $weight) {
+            foreach ($article_factory->getKeyWords($article) as $kw => $weight) {
                 if ($weight > 2) {
                     echo '<strong>' . $kw . '</strong>';
                 } else {
                     echo $kw;
                 }
 
-                echo(sizeof($article->getKeyWords()) > $i ? ', ' : '');
+                echo(sizeof($article_factory->getKeyWords($article)) > $i ? ', ' : '');
                 $i++;
             }
         endif;
