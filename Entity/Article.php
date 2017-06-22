@@ -22,7 +22,7 @@ class Article
         $this->authors    = array();
         $this->index      = null;
         $this->content    = null;
-        $this->weihgt     = 1;
+        $this->weight     = 1;
 
         $this->_factory = $factory;
     }
@@ -57,11 +57,29 @@ class Article
         $this->content = trim($content);
     }
 
-    public function appliedWeight(array $search_keywords)
+    public function appliedWeight(array $search_keywords, $type = "keyword")
     {
-        $this->weight = 1;
+        $this->weight = 0;
 
-        if (! empty($search_keywords)) {
+        if (!empty($search_keywords) && $type == "author") {
+            foreach($search_keywords as $author){
+                if(in_array(trim($author), array_map('strtolower', $this->getAuthors())))
+                    $this->weight += 5;
+
+
+                foreach($this->getAuthors() as $article_auth){
+                    if(strpos(strtolower($article_auth), $author) !== false)
+                        $this->weight += 2;
+                }
+
+                foreach($this->getAuthors() as $article_auth){
+                    $sim = 0;
+                    similar_text($author, strtolower($article_auth), $sim);
+                    if($sim > 80)
+                        $this->weight += 1;
+                }
+            }
+        }else if(!empty($search_keywords)){
             $article_keywords = $this->_factory->getKeywords($this);
             foreach ($article_keywords as $keyword => $keyword_weight) {
                 if (in_array(trim($keyword), $search_keywords)) {

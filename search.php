@@ -19,20 +19,35 @@
 <body>
 
 <form id="search-container" class="container input-group" method="get" action="index.php">
-    <input id="search" type="text" class="form-control" name="search" placeholder="Search for...">
-    <span class="input-group-btn">  
-        <button class="btn btn-default" type="submit">Go!</button>
-    </span>
+    <div class="col-lg-9">
+        <input id="search" type="text" class="form-control" name="search" placeholder="Search for..." value="<?php echo $search ? $search : ''; ?>">
+    </div>
+    <div class="col-lg-2">
+        <select id="type" class="form-control" name="type">
+            <option value="keyword" <?php echo $type == "keyword" ? "selected" : ""; ?>>Keywords (articles)</option>
+            <option value="author" <?php echo $type == "author" ? "selected" : ""; ?>>Author</option>
+        </select>
+    </div>
+    <div class="col-lg-1">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Go!</button>
+        </span>
+    </div>
 </form>
 
 <div class="container">
-    <?php if($search != "") : ?>
+    <?php if($search != "") :
+        $res = sizeof($articles); ?>
         <br />
-        <h2>Résultat de recherche pour '<?= $search ?>'</h2>
-        <?php foreach($articles as $article):
-            $article_link = $url.'?'.http_build_query(array('article_id'=>$article->getIndex()));
-            include('_article.php');
-        endforeach;
+        <?php if($res > 0) : ?>
+            <h2><?= $res ?> result<?= $res == 1 ? '' : 's'; ?> for '<?= $search ?>'</h2>
+            <?php foreach($articles as $article):
+                $article_link = $url.'?'.http_build_query(array('article_id'=>$article->getIndex()));
+                include('_article.php');
+            endforeach;
+        else: ?>
+            <h2>No results found for '<?= $search ?>'</h2>
+        <?php endif;
     endif; ?>
 </div>
 

@@ -30,7 +30,7 @@ class Parser
         );
     }
 
-    public function parseArticles(array $keywords)
+    public function parseArticles(array $keywords, $type = "keyword")
     {
         $articles = array();
         $article_number = 0;
@@ -43,7 +43,7 @@ class Parser
                 if ($this->isNewArticle($buffer)) {
                     $article_number++;
 
-                    $article = $this->getArticle($handle, $buffer, $keywords);
+                    $article = $this->getArticle($handle, $buffer, $keywords, $type);
 
                     if ($article == null) {
                         fclose($handle);
@@ -69,7 +69,7 @@ class Parser
         return preg_match($this->attributes['title'], $buffer);
     }
 
-    private function getArticle($handle, $buffer, array $keywords)
+    private function getArticle($handle, $buffer, array $keywords, $type="keyword")
     {
         $article = new Article(new \Entity\ArticleFactory($this));
         $article->setTitle($this->get('title', $buffer));
@@ -84,15 +84,15 @@ class Parser
             } elseif ($this->is('time', $buffer)) {
                 $article->setDate($this->get('time', $buffer));
             } elseif ($this->is('conference', $buffer)) {
-                $conference = str_replace(array("\n", "\t", "\r"), '', $this->get('conference', $buffer));
+                $conference = $this->get('conference', $buffer);
                 $article->setConference($conference);
             } elseif ($this->is('index', $buffer)) {
                 $article->setIndex($this->get('index', $buffer));
             } elseif ($this->is('description', $buffer)) {
-                $content = str_replace(array("\n", "\t", "\r"), '', $this->get('description', $buffer));
+                $content = $this->get('description', $buffer);
                 $article->setContent($content);
             } else { //We have all article data
-                $article->appliedWeight($keywords);
+                $article->appliedWeight($keywords, $type);
                 return $article;
             }
         }
@@ -105,7 +105,7 @@ class Parser
     }
 
     private function get($attribute_type, $buffer) {
-        return ltrim($buffer, $this->attributes[$attribute_type]);
+        return str_replace(array("\n", "\t", "\r"), '', ltrim($buffer, $this->attributes[$attribute_type]));
     }
 
     public function getArticlesWithWeight($keywords)

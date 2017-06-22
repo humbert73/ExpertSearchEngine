@@ -3,7 +3,7 @@
         <?php
             $i = 1;
             foreach ($article->getAuthors() as $author) {
-                echo '<a href="#TODO">' . $author . '</a>';
+                echo '<a href="' . $url . '?search=' . $author . '&type=author">' . $author . '</a>';
                 echo(sizeof($article->getAuthors()) > $i ? ', ' : '');
                 $i++;
             }
@@ -23,10 +23,11 @@
             echo 'Keywords: ';
             $i = 1;
             foreach ($article_factory->getKeyWords($article) as $kw => $weight) {
+                $link = '<a href="' . $url . '?search=' . $kw . '&type=keyword">';
                 if ($weight > 2) {
-                    echo '<strong>' . $kw . '</strong>';
+                    echo '<strong>' . $link . $kw . '</a></strong>';
                 } else {
-                    echo $kw;
+                    echo $link . $kw . '</a>';
                 }
 
                 echo(sizeof($article_factory->getKeyWords($article)) > $i ? ', ' : '');

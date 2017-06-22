@@ -20,13 +20,34 @@ class ArticleFactory
         return $this->parser->parseArticles(array());
     }
 
-    public function findMatchingArticles($search)
+    public function findMatchingArticles($search, $type = "keyword")
     {
-        $keywords = explode(' ', trim($search));
-        $articles = $this->parser->parseArticles($keywords);
+        if($type == "author")
+            $keywords = explode(',', trim($search));
+        else
+            $keywords = explode(' ', trim($search));
 
-        return $this->getTenFirstArticlesSortByWeight($articles);
+        $articles = $this->parser->parseArticles($keywords, $type);
+
+        foreach($articles as $key => $a){
+            if($a->getWeight() < 1)
+                unset($articles[$key]);
+        }
+
+        usort($articles, function($a, $b)
+        {
+            if($a->getWeight() == $b->getWeight())
+                return strcmp($b->getDate(), $a->getDate());
+            else
+                return strcmp($b->getWeight(), $a->getWeight());
+        });
+
+        // Retourne les 15 articles les plus pertinents
+        // Par poids et par date de publication
+        return (array_slice($articles, 0, 15));
     }
+
+
 
     private function getTenFirstArticlesSortByWeight(array $articles)
     {
@@ -181,6 +202,7 @@ class ArticleFactory
             'have',
             'has',
             'can',
+            'using',
             'set',
             '',
             'you',
@@ -235,6 +257,9 @@ class ArticleFactory
             'we',
             'he',
             'she',
+            'well',
+            'not',
+            'yes',
             'they',
             'one',
             'from',
@@ -244,6 +269,7 @@ class ArticleFactory
             'www',
             'co',
             'uk',
+            'org',
             'com'
         ];
 

@@ -9,12 +9,20 @@ use Entity\Article;
 
 $url             = "index.php";
 $search          = "";
+$type            = "";
 $parser          = new Parser('src/outputacm.txt');
 $article_factory = new ArticleFactory($parser);
 
+if(isset($_GET["type"])){
+    $type = $_GET["type"];
+}
+
 if (isset($_GET["search"])) {
-    $search = $_GET["search"];
-    $articles = $article_factory->findMatchingArticles($search);
+    $search = strtolower($_GET["search"]);
+    if($type == "author")
+        $articles = $article_factory->findMatchingArticles($search, $type);
+    else
+        $articles = $article_factory->findMatchingArticles($search);
 } else {
     $articles = $article_factory->getArticles();
 }
